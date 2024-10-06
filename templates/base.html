@@ -3,38 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>todo app</title>
+    <title>Todo App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
 </head>
 <body>
+    <div class="ui container" style="margin-top:50px">
+        <!--- Title -->
+        <h1 class="ui center aligned first header">This is the regular, boring todo app.</h1>
+        <br>
 
-    <h1>Todo App</h1>
+        <!--- Form -->
+        <form class="ui form" action="/add" method="POST"> <!-- This will execute the /add (add_todo) function in app.py -->
+            <div class="field">
+                <label for="input"><h1 class="ui medium header">Todo Title</h1></label>
+                <input type="text" id="input" name="title" placeholder="Enter Todo...">
+                <br>
+                <br>
+                <button class="ui blue button" type="submit">Add</button>
+            </div>
+        </form>
 
-    <!--- This will execute the /add (add_todo) function in app.py-->
-    <form action="/add" method="POST"> 
-        <div>
-            <label for="title">Todo Title</label>
-            <input type="text" name="title" placeholder="Enter Todo...">
-            <br>
-            <button type="submit">Add</button>
-        </div>
-    </form>
+        <!--- Rendering each todo item -->
+        {% for todo in todo_list %}
+            <div class="ui segment">
+                <p class="ui big header"> {{ todo.id }} | {{ todo.title }} </p>
 
-    <!--- Rendering each todo item -->
-    {% for todo in todo_list %}
-        <p> {{ todo.id }} | {{ todo.title }} </p>
+                {% if todo.complete == False %}
+                    <span class="ui grey button" style="pointer-events:none">Not Completed</span>
+                {% else %}
+                    <span class="ui green button" style="pointer-events:none">Completed</span>
+                {% endif %}
 
-        {% if todo.complete == False %}
-            <span>Not Completed</span>
-        {% else %}
-            <span>Completed</span>
-        {% endif %}
+                <a class="ui blue button" href="/update/{{ todo.id }}">Update</a>
 
-        <a href="/update/{{ todo.id }}">Update</a>
-
-        <a href="/delete/{{ todo.id }}">Delete</a>
-
-    {% endfor %}
-
-    
+                <a class="ui red button" href="/delete/{{ todo.id }}">Delete</a>
+            </div>
+        {% endfor %}
+    </div>
 </body>
 </html>
